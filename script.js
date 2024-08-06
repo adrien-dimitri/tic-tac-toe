@@ -1,9 +1,16 @@
 const GameBoard = (function () {
   board = [
-    "", "", "",
-    "", "", "",
-    "", "", ""
+    " ", " ", " ",
+    " ", " ", " ",
+    " ", " ", " "
   ]
+
+  // reference
+  // board = [
+  //   "0", "1", "2",
+  //   "3", "4", "5",
+  //   "6", "7", "8"
+  // ]
 
   const getBoard = () => board;
 
@@ -14,7 +21,7 @@ const GameBoard = (function () {
   };
 
   const checkCell = (pos) => {
-    return board[pos] === "" ? true : false
+    return board[pos] === " " ? true : false
   }
 
   const updateBoard = (pos, player) => {
@@ -33,13 +40,14 @@ function createPlayer (name, mark) {
   return { name, mark }
 }
 
-function GameController (player1="p1", player2="p2") {
+function GameController (player1="player1-X", player2="player2-O") {
   const board = GameBoard
 
   const p1 = createPlayer(player1, "X")
   const p2 = createPlayer(player2, "O")
 
   let activePlayer = p1
+  let gameEnded = false
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === p1 ? p2 : p1;
@@ -49,19 +57,26 @@ function GameController (player1="p1", player2="p2") {
 
   const printNewRound = () => {
     board.printBoard();
-    console.log(`${getActivePlayer().name}'s turn.`);
+    if (!gameEnded) {
+      console.log(`${getActivePlayer().name}'s turn.`);
+    }
   };
 
   const playRound = (pos) => {
-    console.log(
-      `${getActivePlayer().name} played in cell ${pos}`
-    );
+    if (gameEnded) {
+      console.log("Game has already ended.");
+      return true;
+    }
+
+    console.log(`${getActivePlayer().name} played in cell ${pos}`);
     if (board.checkCell(pos)) {
       board.updateBoard(pos, getActivePlayer().mark);
-      /*  This is where we would check for a winner and handle that logic,
-        such as a win message. */
 
-      // Switch player turn
+      if (checkWinner()) {
+        endGame();
+        return;
+      }
+
       switchPlayerTurn();
     }
     else {
@@ -71,11 +86,37 @@ function GameController (player1="p1", player2="p2") {
     printNewRound();
   };
 
+  const checkWinner = () => {
+    const b = board.getBoard();
+    // check diagonals 
+   // Check diagonals
+    if ((b[0] === b[4] && b[4] === b[8] && b[0] !== " ") || 
+    (b[2] === b[4] && b[4] === b[6] && b[2] !== " ")) {
+      return true;
+    }
+
+    // Check rows and columns
+    for (let i = 0; i < 3; i++) {
+      if ((b[3 * i] === b[3 * i + 1] && b[3 * i + 1] === b[3 * i + 2] && b[3 * i] !== " ") || 
+          (b[i] === b[i + 3] && b[i + 3] === b[i + 6] && b[i] !== " ")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+    const endGame = () => {
+      gameEnded = true;
+      console.log(`${getActivePlayer().name} won the game!`)
+
+    }
+
   printNewRound();
 
   return {
     playRound,
-    getActivePlayer
+    getActivePlayer,
+    endGame
   };
 }
 
