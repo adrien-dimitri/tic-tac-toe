@@ -26,6 +26,7 @@ const GameBoard = (function () {
 
   const updateBoard = (pos, player) => {
     board[pos] = player
+    DisplayController.updateBoard(getBoard());
   };
 
   return {
@@ -42,6 +43,7 @@ function createPlayer (name, mark) {
 
 function GameController (player1="player1-X", player2="player2-O") {
   const board = GameBoard
+  const display = DisplayController
 
   const p1 = createPlayer(player1, "X")
   const p2 = createPlayer(player2, "O")
@@ -57,6 +59,7 @@ function GameController (player1="player1-X", player2="player2-O") {
 
   const printNewRound = () => {
     board.printBoard();
+    display.updateBoard(board.getBoard());
     if (!gameEnded) {
       console.log(`${getActivePlayer().name}'s turn.`);
     }
@@ -74,6 +77,7 @@ function GameController (player1="player1-X", player2="player2-O") {
 
       if (checkWinner()) {
         endGame();
+        printNewRound();
         return;
       }
 
@@ -120,4 +124,24 @@ function GameController (player1="player1-X", player2="player2-O") {
   };
 }
 
-const game = GameController();
+const DisplayController = (() => {
+  const cells = document.querySelectorAll(".cell")
+
+  const updateBoard = (board) => {
+    cells.forEach((cell, index) => {
+        cell.textContent = board[index];
+    });
+  }
+
+  cells.forEach((cell, index) => {
+    cell.addEventListener("click", () => {
+      game.playRound(index);
+    });
+  });
+
+  return {
+    updateBoard
+  }
+})();
+
+const game = GameController()
