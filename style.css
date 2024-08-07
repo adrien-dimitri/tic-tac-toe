@@ -1,14 +1,77 @@
-.wrapper {
-    display: grid;
-    grid-template-columns: 50px 50px 50px;
-    grid-template-rows: 50px 50px 50px;
-  }
-
-.wrapper > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid black;
-    font-size: xx-large;
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
 }
 
+.wrapper {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px;
+}
+
+.wrapper > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: black;
+  border-width: 0.5px;
+  font-size: 90px;
+}
+
+.top-left {
+  border-bottom: solid;
+  border-right: solid;
+}
+
+.top-center {
+  border-bottom: solid;
+  border-left: solid;
+  border-right: solid;
+}
+
+.top-right {
+  border-bottom: solid;
+  border-left: solid;
+}
+
+/* Borders for middle row */
+.middle-left {
+  border-top: solid;
+  border-right: solid;
+  border-bottom: solid;
+}
+
+.middle-center {
+  border:  solid;
+}
+
+.middle-right {
+  border-top:  solid;
+  border-left:  solid;
+  border-bottom:  solid;
+}
+
+/* Borders for bottom row */
+.bottom-left {
+  border-top:  solid;
+  border-right:  solid;
+}
+
+.bottom-center {
+  border-top: solid;
+  border-left: solid;
+  border-right: solid;
+}
+
+.bottom-right {
+  border-top: solid;
+  border-left: solid;
+}
