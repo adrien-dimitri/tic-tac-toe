@@ -24,6 +24,7 @@ body {
   border-color: black;
   border-width: 0.5px;
   font-size: 90px;
+  cursor: pointer;
 }
 
 .top-left {

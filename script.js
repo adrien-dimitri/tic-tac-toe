@@ -115,33 +115,62 @@ function GameController (player1="player1-X", player2="player2-O") {
 
     }
 
+    const isGameEnded = () => gameEnded;
+
   printNewRound();
 
   return {
     playRound,
     getActivePlayer,
-    endGame
+    endGame,
+    isGameEnded
   };
 }
 
 const DisplayController = (() => {
-  const cells = document.querySelectorAll(".cell")
+  const cells = document.querySelectorAll(".cell");
 
   const updateBoard = (board) => {
     cells.forEach((cell, index) => {
-        cell.textContent = board[index];
+      cell.textContent = board[index];
     });
-  }
+  };
 
   cells.forEach((cell, index) => {
+    let originalContent = "";
+    let isClicked = false; 
+
     cell.addEventListener("click", () => {
-      game.playRound(index);
+      if (game.isGameEnded()) return;
+      cell.style.color = "rgba(0, 0, 0, 1.0)"
+      if (!isClicked) {
+        game.playRound(index);
+        isClicked = true; 
+      }
+    });
+
+    cell.addEventListener("mouseenter", () => {
+      if (game.isGameEnded()) return;
+      originalContent = cell.textContent; 
+      if (!isClicked && cell.textContent === " ") {
+        cell.textContent = game.getActivePlayer().mark;
+      }
+      cell.style.color = "rgba(0, 0, 0, 0.5)";
+    });
+
+    cell.addEventListener("mouseleave", () => {
+      if (game.isGameEnded()) return;
+      if (!isClicked && originalContent === " ") {
+        cell.textContent = " ";  // Revert to the original content if not clicked
+      }
+      cell.style.color = "rgba(0, 0, 0, 1.0)";
     });
   });
 
   return {
-    updateBoard
-  }
+    updateBoard,
+  };
 })();
+
 
 const game = GameController()
