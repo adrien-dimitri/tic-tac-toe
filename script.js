@@ -54,6 +54,8 @@ function GameController(player1="p1", player2="p2") {
   const p1 = createPlayer(player1, "X");
   const p2 = createPlayer(player2, "O");
 
+  display.updateScore(p1, p2);
+
   let activePlayer = p1;
   let gameEnded = false;
 
@@ -165,7 +167,6 @@ const DisplayController = (() => {
       p2Score.style.display = "block";
 
       game = GameController(p1Div.textContent, p2Div.textContent);
-      startButton
     });
   };
 
@@ -233,6 +234,32 @@ const DisplayController = (() => {
     });
   });
 
+  const resetButton = document.querySelector(".reset-button");
+  resetButton.addEventListener("click", () => {
+    resetSession();
+  });
+
+  const resetSession = () => {
+    game = null;
+    resetIsClicked();
+    const p1Input = document.querySelector(".p1-name-input");
+    const p2Input = document.querySelector(".p2-name-input");
+    const p1Div = document.querySelector(".p1-name");
+    const p2Div = document.querySelector(".p2-name");
+    const p1Score = document.querySelector(".p1-score");
+    const p2Score = document.querySelector(".p2-score");
+
+    p1Input.style.display = "block";
+    p2Input.style.display = "block"; 
+    p1Div.style.display = "none";
+    p2Div.style.display = "none";
+    p1Score.style.display = "none";
+    p2Score.style.display = "none";
+
+    startSession();
+
+  }
+      
   return {
     updateBoard,
     startSession,
@@ -243,6 +270,4 @@ const DisplayController = (() => {
 
 DisplayController.startSession();
 
-
-// TODO - start new game after win
 // TODO - work on Reset button
