@@ -1,6 +1,6 @@
 # Tic Tac Toe
 
-A simple Tic Tac Toe game implemented using HTML, CSS, and JavaScript.
+For this project, I wanted to apply JS concepts such as closures and factory functions. This helped me organise my code better and also added modularity to it while maintaining a clear structure.
 
 ## Table of Contents
 
