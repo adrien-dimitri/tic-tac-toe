@@ -8,10 +8,11 @@ body{
 }
 
 .wrapper {
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  grid-template-columns: auto;
+  grid-template-rows: auto 50px;
   height: 100vh;
 }
 
@@ -19,6 +20,7 @@ body{
   display: grid;
   grid-template-columns: 100px 100px 100px;
   grid-template-rows: 100px 100px 100px;
+  justify-content: center;
 }
 
 .game-body > div {
@@ -82,9 +84,8 @@ body{
 }
 
 .score-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   font-size: 20px;
   margin-top: 20px;
   padding: 20px;
@@ -108,11 +109,11 @@ body{
 }
 
 .player-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  display: grid;
+  grid-auto-rows: 70px;
   width: 300px;
+  justify-items: center;
+  align-items: center;
 }
 
 .p1-score, .p2-score {
@@ -151,4 +152,19 @@ body{
 
 .overlay-text2 {
   font-size: 30px;
+}
+
+.button-box {
+  display: grid;
+  grid-template-columns: 100px 100px;
+  column-gap: 50px;
+  justify-content: center;
+}
+
+.button-box > button {
+  padding: 10px;
+  font-size: 20px;
+  background-color: #e0e0e0;
+  border: 1px solid black;
+  cursor: pointer;
 }
