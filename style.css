@@ -156,7 +156,7 @@ body{
 
 .button-box {
   display: grid;
-  grid-template-columns: 100px 100px;
+  grid-template-columns: 100px;
   column-gap: 50px;
   justify-content: center;
 }

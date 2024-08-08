@@ -148,6 +148,7 @@ const DisplayController = (() => {
 
   const startSession = () => {
     const startButton = document.querySelector(".start-button");
+    const resetButton = document.querySelector(".reset-button");
     const p1Input = document.querySelector(".p1-name-input");
     const p2Input = document.querySelector(".p2-name-input");
     const p1Div = document.querySelector(".p1-name");
@@ -167,6 +168,8 @@ const DisplayController = (() => {
       p2Score.style.display = "block";
 
       game = GameController(p1Div.textContent, p2Div.textContent);
+      startButton.style.display = "none";
+      resetButton.style.display = "block";
     });
   };
 
@@ -237,6 +240,9 @@ const DisplayController = (() => {
   const resetButton = document.querySelector(".reset-button");
   resetButton.addEventListener("click", () => {
     resetSession();
+    const startButton = document.querySelector(".start-button");
+    startButton.style.display = "block";
+    resetButton.style.display = "none";
   });
 
   const resetSession = () => {
