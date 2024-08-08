@@ -22,11 +22,20 @@ const GameBoard = (function () {
     DisplayController.updateBoard(getBoard());
   };
 
+  const resetBoard = () => {
+    board = [
+      " ", " ", " ",
+      " ", " ", " ",
+      " ", " ", " "
+    ];
+  }
+
   return {
     getBoard,
     printBoard,
     checkCell,
-    updateBoard
+    updateBoard,
+    resetBoard
   };
 })();
 
@@ -58,17 +67,23 @@ function GameController(player1="p1", player2="p2") {
     board.printBoard();
     display.updateBoard(board.getBoard());
     if (!gameEnded) {
-      console.log(`${getActivePlayer().name}'s turn.`);
+      // console.log(`${getActivePlayer().name}'s turn.`);
     }
+  };
+
+  const startNewGame = () => {
+    board.resetBoard();
+    gameEnded = false;
+    printNewRound();
   };
 
   const playRound = (pos) => {
     if (gameEnded) {
-      console.log("Game has already ended.");
+      // console.log("Game has already ended.");
       return true;
     }
 
-    console.log(`${getActivePlayer().name} played in cell ${pos}`);
+    //console.log(`${getActivePlayer().name} played in cell ${pos}`);
     if (board.checkCell(pos)) {
       board.updateBoard(pos, getActivePlayer().mark);
 
@@ -81,7 +96,7 @@ function GameController(player1="p1", player2="p2") {
       switchPlayerTurn();
     }
     else {
-      console.log(`Invalid move for ${activePlayer.mark}. Try again.`);
+      // console.log(`Invalid move for ${activePlayer.mark}. Try again.`);
     }
     
     printNewRound();
@@ -106,10 +121,10 @@ function GameController(player1="p1", player2="p2") {
   };
 
   const endGame = () => {
-    gameEnded = true;
     getActivePlayer().winGame();
-    display.UpdateScore(p1, p2);
-    console.log(`${getActivePlayer().name} won the game!`);
+    display.updateScore(p1, p2);
+    display.startNextGame(getActivePlayer().name);
+    gameEnded = true;
   };
 
   const isGameEnded = () => gameEnded;
@@ -120,14 +135,16 @@ function GameController(player1="p1", player2="p2") {
     playRound,
     getActivePlayer,
     endGame,
-    isGameEnded
+    isGameEnded,
+    startNewGame
   };
 }
 
 const DisplayController = (() => {
   let game = null;
+  let isClickedArray = [];
 
-  const startGame = () => {
+  const startSession = () => {
     const startButton = document.querySelector(".start-button");
     const p1Input = document.querySelector(".p1-name-input");
     const p2Input = document.querySelector(".p2-name-input");
@@ -137,8 +154,6 @@ const DisplayController = (() => {
     const p2Score = document.querySelector(".p2-score");
 
     startButton.addEventListener("click", () => {
-      console.log(p1Input.value, p2Input.value);
-
       p1Div.textContent = p1Input.value === "" ? "Player X" : p1Input.value + " [X]";
       p2Div.textContent = p2Input.value === "" ? "Player O" : p2Input.value + " [O]";
       
@@ -150,11 +165,28 @@ const DisplayController = (() => {
       p2Score.style.display = "block";
 
       game = GameController(p1Div.textContent, p2Div.textContent);
-      console.log(game);
+      startButton
     });
   };
+
+  const overlay = document.querySelector(".overlay");
+  const startNextGame = (winner) => {
+    const overlayText = document.querySelector(".overlay-text");
+    overlay.style.display = "flex";
+    overlayText.textContent = `${winner} won the game!`;
+    overlay.addEventListener("click", () => {
+      overlay.style.display = "none";
+      overlayText.textContent = "";
+      resetIsClicked();
+      game.startNewGame();
+    });
+  };
+
+  const resetIsClicked = () => {
+    isClickedArray = isClickedArray.map(() => false);  // Reset all to false
+  };
   
-  const UpdateScore = (p1, p2) => {
+  const updateScore = (p1, p2) => {
     const p1Score = document.querySelector(".p1-score");
     const p2Score = document.querySelector(".p2-score");
 
@@ -172,29 +204,29 @@ const DisplayController = (() => {
 
   cells.forEach((cell, index) => {
     let originalContent = "";
-    let isClicked = false; 
+    isClickedArray[index] = false; 
 
     cell.addEventListener("click", () => {
       if (!game || game.isGameEnded()) return;
       cell.style.color = "rgba(0, 0, 0, 1.0)";
-      if (!isClicked) {
+      if (!isClickedArray[index]) {
         game.playRound(index);
-        isClicked = true;
+        isClickedArray[index] = true;
       }
     });
 
     cell.addEventListener("mouseenter", () => {
       if (!game || game.isGameEnded()) return;
       originalContent = cell.textContent; 
-      if (!isClicked && cell.textContent === " ") {
+      if (!isClickedArray[index] && cell.textContent === " ") {
         cell.textContent = game.getActivePlayer().mark;
+        cell.style.color = "rgba(0, 0, 0, 0.5)";
       }
-      cell.style.color = "rgba(0, 0, 0, 0.5)";
     });
 
     cell.addEventListener("mouseleave", () => {
       if (!game || game.isGameEnded()) return;
-      if (!isClicked && originalContent === " ") {
+      if (!isClickedArray[index] && originalContent === " ") {
         cell.textContent = " ";  // Revert to the original content if not clicked
       }
       cell.style.color = "rgba(0, 0, 0, 1.0)";
@@ -203,12 +235,13 @@ const DisplayController = (() => {
 
   return {
     updateBoard,
-    startGame,
-    UpdateScore
+    startSession,
+    updateScore,
+    startNextGame
   };
 })();
 
-DisplayController.startGame();
+DisplayController.startSession();
 
 
 // TODO - start new game after win
