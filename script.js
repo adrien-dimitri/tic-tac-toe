@@ -101,7 +101,7 @@ function GameController(player1="p1", player2="p2") {
 
   display.updateScore(p1, p2);
 
-  let activePlayer = p1;
+  let activePlayer = Math.random() < 0.5 ? p1 : p2;
   let gameEnded = false;
 
   /**
@@ -109,6 +109,7 @@ function GameController(player1="p1", player2="p2") {
    */
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === p1 ? p2 : p1;
+    display.highlightTurn(getActivePlayer().name);
   };
 
   /**
@@ -134,6 +135,9 @@ function GameController(player1="p1", player2="p2") {
   const startNewGame = () => {
     board.resetBoard();
     gameEnded = false;
+    activePlayer = Math.random() < 0.5 ? p1 : p2;
+    display.highlightTurn(getActivePlayer().name);
+
     printNewRound();
   };
 
@@ -212,7 +216,8 @@ function GameController(player1="p1", player2="p2") {
     if (!isTie) {
       getActivePlayer().winGame();
       display.updateScore(p1, p2);
-      display.startNextGame(getActivePlayer().name);
+      display.startNextGame(`${getActivePlayer().name} won the game!`);
+      switchPlayerTurn();
     } else {
       display.startNextGame("It's a tie!");
     }
@@ -270,6 +275,9 @@ const DisplayController = (() => {
       p2Score.style.display = "block";
 
       game = GameController(p1Div.textContent, p2Div.textContent);
+
+      highlightTurn(game.getActivePlayer().name);
+
       startButton.style.display = "none";
       resetButton.style.display = "block";
     });
@@ -380,6 +388,8 @@ const DisplayController = (() => {
     p2Input.style.display = "block"; 
     p1Div.style.display = "none";
     p2Div.style.display = "none";
+    p1Div.style.fontWeight = "normal";
+    p2Div.style.fontWeight = "normal";
     p1Score.style.display = "none";
     p2Score.style.display = "none";
 
@@ -395,12 +405,26 @@ const DisplayController = (() => {
 
     startSession();
   }
+
+  const highlightTurn = (player) => {
+    const p1Div = document.querySelector(".p1-name");
+    const p2Div = document.querySelector(".p2-name");
+
+    if (player === p1Div.textContent) {
+      p1Div.style.fontWeight = "bold";
+      p2Div.style.fontWeight = "normal"
+    } else {
+      p2Div.style.fontWeight =  "bold";
+      p1Div.style.fontWeight = "normal";
+    }
+  }
       
   return {
     updateBoard,
     startSession,
     updateScore,
-    startNextGame
+    startNextGame,
+    highlightTurn
   };
 })();
 
