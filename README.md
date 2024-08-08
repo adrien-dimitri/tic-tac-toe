@@ -15,8 +15,7 @@ A simple Tic Tac Toe game implemented using HTML, CSS, and JavaScript.
 
 This project is a web-based Tic Tac Toe game that allows two players to play against each other. The game keeps track of the players' scores and allows for resetting the game board.
 
-![Tic Tac Toe Gameplay](images/gameplay.png)
-
+![Tic Tac Toe Gameplay](images/gameplay.gif)
 
 ## Features
 
@@ -24,6 +23,7 @@ This project is a web-based Tic Tac Toe game that allows two players to play aga
 - Score tracking
 - Reset functionality
 - Responsive design
+- Alternating starting player for each new game
 
 ## Installation
 
@@ -64,7 +64,7 @@ Manages the game logic and player interactions.
 - `GameController(player1, player2)`: Initializes the game controller with two players.
 - `playRound(pos)`: Plays a round by updating the board and checking for a winner.
 - `getActivePlayer()`: Gets the active player.
-- `endGame()`: Ends the game by updating the score and starting the next game.
+- `endGame(isTie)`: Ends the game by updating the score and starting the next game.
 - `isGameEnded()`: Checks if the game has ended.
 - `startNewGame()`: Starts a new game by resetting the board and printing the new round.
 
@@ -73,11 +73,12 @@ Manages the game logic and player interactions.
 Handles the display and user interaction of the tic-tac-toe game.
 
 - `startSession()`: Initializes the game session by setting up event listeners for the start and reset buttons.
-- `startNextGame(winner)`: Displays an overlay announcing the winner of the game.
+- `startNextGame(msg)`: Displays an overlay announcing the winner of the game.
 - `resetIsClicked()`: Resets the `isClickedArray` to all `false` values.
 - `updateScore(p1, p2)`: Updates the displayed scores for both players.
 - `updateBoard(board)`: Updates the game board display based on the current state of the board.
 - `resetSession()`: Resets the game session and reinitializes the session.
+- `highlightTurn(player)`: Highlights the name of the player whose turn it is.
 
 ## License
 
