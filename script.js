@@ -11,7 +11,7 @@ const GameBoard = (function () {
 
   /**
    * Gets the current state of the game board.
-   * @returns {string[]} The current game board.
+   * @returns {string[]} The current game board, represented as an array of strings.
    */
   const getBoard = () => board;
 
@@ -25,17 +25,17 @@ const GameBoard = (function () {
   };
 
   /**
-   * Checks if a cell is empty.
-   * @param {number} pos - The position of the cell to check.
+   * Checks if a cell at the specified position is empty.
+   * @param {number} pos - The position of the cell to check (0 to 8).
    * @returns {boolean} True if the cell is empty, false otherwise.
    */
   const checkCell = (pos) => {
-    return board[pos] === " " ? true : false;
+    return board[pos] === " ";
   };
 
   /**
    * Updates the game board at a specific position with the player's mark.
-   * @param {number} pos - The position to update.
+   * @param {number} pos - The position to update (0 to 8).
    * @param {string} player - The player's mark ("X" or "O").
    */
   const updateBoard = (pos, player) => {
@@ -44,7 +44,7 @@ const GameBoard = (function () {
   };
 
   /**
-   * Resets the game board to its initial state.
+   * Resets the game board to its initial state with all cells empty.
    */
   const resetBoard = () => {
     board = [
@@ -67,13 +67,13 @@ const GameBoard = (function () {
  * Creates a player object.
  * @param {string} name - The name of the player.
  * @param {string} mark - The mark of the player ("X" or "O").
- * @returns {object} The player object.
+ * @returns {object} The player object, which includes methods to increment the score and get the current score.
  */
 function createPlayer(name, mark) {
   let score = 0;
 
   /**
-   * Increments the player's score.
+   * Increments the player's score by 1.
    */
   const winGame = () => score++;
 
@@ -88,9 +88,9 @@ function createPlayer(name, mark) {
 
 /**
  * GameController module manages the game logic and player interactions.
- * @param {string} [player1="p1"] - The name of the first player.
- * @param {string} [player2="p2"] - The name of the second player.
- * @returns {object} The game controller object.
+ * @param {string} [player1="p1"] - The name of the first player (default is "p1").
+ * @param {string} [player2="p2"] - The name of the second player (default is "p2").
+ * @returns {object} The game controller object with methods to play rounds, start a new game, and check the game state.
  */
 function GameController(player1="p1", player2="p2") {
   const board = GameBoard;
@@ -113,7 +113,7 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Gets the active player.
+   * Gets the currently active player.
    * @returns {object} The active player object.
    */
   const getActivePlayer = () => activePlayer;
@@ -130,7 +130,7 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Starts a new game by resetting the board and printing the new round.
+   * Starts a new game by resetting the board and setting up the initial game state.
    */
   const startNewGame = () => {
     board.resetBoard();
@@ -143,8 +143,8 @@ function GameController(player1="p1", player2="p2") {
 
   /**
    * Plays a round by updating the board and checking for a winner or a tie.
-   * @param {number} pos - The position to play.
-   * @returns {boolean} True if the game has already ended, false otherwise.
+   * @param {number} pos - The position to play (0 to 8).
+   * @returns {boolean} True if the game has ended, false otherwise.
    */
   const playRound = (pos) => {
     if (gameEnded) {
@@ -178,7 +178,7 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Checks if there is a winner.
+   * Checks if there is a winner on the board.
    * @returns {boolean} True if there is a winner, false otherwise.
    */
   const checkWinner = () => {
@@ -200,7 +200,7 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Checks if the game is a tie.
+   * Checks if the game has ended in a tie.
    * @returns {boolean} True if the game is a tie, false otherwise.
    */
   const checkTie = () => {
@@ -209,7 +209,7 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Ends the game by updating the score and starting the next game.
+   * Ends the game by updating the score and showing a message.
    * @param {boolean} [isTie=false] - Indicates if the game ended in a tie.
    */
   const endGame = (isTie = false) => {
@@ -286,9 +286,9 @@ const DisplayController = (() => {
   const overlay = document.querySelector(".overlay");
 
   /**
-   * Displays an overlay announcing the winner of the game and sets up an event listener
+   * Displays an overlay announcing the outcome of the game and sets up an event listener
    * to start a new game when the overlay is clicked.
-   * @param {string} winner - The name of the player who won the game.
+   * @param {string} msg - The message to display on the overlay (e.g., winner announcement or tie).
    */
   const startNextGame = (msg) => {
     const overlayText = document.querySelector(".overlay-text");
@@ -326,7 +326,7 @@ const DisplayController = (() => {
 
   /**
    * Updates the game board display based on the current state of the board.
-   * @param {array} board - An array representing the current state of the game board.
+   * @param {string[]} board - An array representing the current state of the game board.
    */
   const updateBoard = (board) => {
     cells.forEach((cell, index) => {
@@ -406,6 +406,10 @@ const DisplayController = (() => {
     startSession();
   }
 
+  /**
+   * Highlights the name of the player whose turn it is.
+   * @param {string} player - The name of the player whose turn it is.
+   */
   const highlightTurn = (player) => {
     const p1Div = document.querySelector(".p1-name");
     const p2Div = document.querySelector(".p2-name");
