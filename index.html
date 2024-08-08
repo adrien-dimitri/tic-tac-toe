@@ -12,15 +12,35 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="cell top-left"></div>
-        <div class="cell top-center"></div>
-        <div class="cell top-right"></div>
-        <div class="cell middle-left"></div>
-        <div class="cell middle-center"></div>
-        <div class="cell middle-right"></div>
-        <div class="cell bottom-left"></div>
-        <div class="cell bottom-center"></div>
-        <div class="cell bottom-right"></div>
-    </div>
+        <div class="game-body">
+            <div class="cell top-left"></div>
+            <div class="cell top-center"></div>
+            <div class="cell top-right"></div>
+            <div class="cell middle-left"></div>
+            <div class="cell middle-center"></div>
+            <div class="cell middle-right"></div>
+            <div class="cell bottom-left"></div>
+            <div class="cell bottom-center"></div>
+            <div class="cell bottom-right"></div>
+        </div>
+        <div class="score-box">
+            <div class="player-info"> 
+                <input class="p1-name-input" type="text" placeholder="X: Enter your name">
+                <div class="p1-name" style="display: none;"></div>
+                <div class="p1-score" style="display: none;">0</div>
+            </div>
+            <div class="separator"></div>
+            <div class="player-info">
+                <input class="p2-name-input" type="text" placeholder="O: Enter your name">
+                <div class="p2-name" style="display: none;"></div>
+                <div class="p2-score" style="display: none;">0</div>
+            </div>
+            
+        </div>
+        <div class="button-box">
+            <button class="start-button">Start</button>
+            <button class="reset-button">Reset</button>
+        </div>
+    </body>
 </body>
 </html>

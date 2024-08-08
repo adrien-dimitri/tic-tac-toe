@@ -1,23 +1,27 @@
-body {
-  font-family: "Roboto", Arial, sans-serif;
-  font-weight: 100;
-  font-style: normal;
+body{
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+  font-style: normal;
   background-color: #f0f0f0;
 }
 
 .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.game-body {
   display: grid;
   grid-template-columns: 100px 100px 100px;
   grid-template-rows: 100px 100px 100px;
 }
 
-.wrapper > div {
+.game-body > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,4 +79,48 @@ body {
 .bottom-right {
   border-top: solid;
   border-left: solid;
+}
+
+.score-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  font-size: 20px;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.score-box div {
+  margin: 10px;
+}
+
+.p1-name-input, .p2-name-input {
+  margin: 10px;
+  padding: 10px;
+  font-size: 15px;
+  background-color: #f7f7f7;
+  border: 1px solid black;
+}
+
+.p1-name, .p2-name {
+  font-weight: 300;
+  font-size: 40px;
+}
+
+.player-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 300px;
+}
+
+.p1-score, .p2-score {
+  font-weight: 300;
+  font-size: 40px;
+}
+
+.separator {
+  margin: 10px;
+  border: 2px solid black;
 }
