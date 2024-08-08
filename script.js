@@ -138,7 +138,7 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Plays a round by updating the board and checking for a winner.
+   * Plays a round by updating the board and checking for a winner or a tie.
    * @param {number} pos - The position to play.
    * @returns {boolean} True if the game has already ended, false otherwise.
    */
@@ -154,6 +154,12 @@ function GameController(player1="p1", player2="p2") {
 
       if (checkWinner()) {
         endGame();
+        printNewRound();
+        return;
+      }
+
+      if (checkTie()) {
+        endGame(true);
         printNewRound();
         return;
       }
@@ -190,12 +196,26 @@ function GameController(player1="p1", player2="p2") {
   };
 
   /**
-   * Ends the game by updating the score and starting the next game.
+   * Checks if the game is a tie.
+   * @returns {boolean} True if the game is a tie, false otherwise.
    */
-  const endGame = () => {
-    getActivePlayer().winGame();
-    display.updateScore(p1, p2);
-    display.startNextGame(getActivePlayer().name);
+  const checkTie = () => {
+    const b = board.getBoard();
+    return b.every(cell => cell !== " ");
+  };
+
+  /**
+   * Ends the game by updating the score and starting the next game.
+   * @param {boolean} [isTie=false] - Indicates if the game ended in a tie.
+   */
+  const endGame = (isTie = false) => {
+    if (!isTie) {
+      getActivePlayer().winGame();
+      display.updateScore(p1, p2);
+      display.startNextGame(getActivePlayer().name);
+    } else {
+      display.startNextGame("It's a tie!");
+    }
     gameEnded = true;
   };
 
@@ -262,10 +282,10 @@ const DisplayController = (() => {
    * to start a new game when the overlay is clicked.
    * @param {string} winner - The name of the player who won the game.
    */
-  const startNextGame = (winner) => {
+  const startNextGame = (msg) => {
     const overlayText = document.querySelector(".overlay-text");
     overlay.style.display = "flex";
-    overlayText.textContent = `${winner} won the game!`;
+    overlayText.textContent = `${msg}`;
     overlay.addEventListener("click", () => {
       overlay.style.display = "none";
       overlayText.textContent = "";
@@ -273,6 +293,8 @@ const DisplayController = (() => {
       game.startNewGame();
     });
   };
+  
+  const cells = document.querySelectorAll(".cell");
 
   /**
    * Resets the `isClickedArray` to all `false` values, indicating that no cells have been clicked.
@@ -293,8 +315,6 @@ const DisplayController = (() => {
     p1Score.textContent = p1.getScore();
     p2Score.textContent = p2.getScore();
   }
-
-  const cells = document.querySelectorAll(".cell");
 
   /**
    * Updates the game board display based on the current state of the board.
@@ -340,9 +360,6 @@ const DisplayController = (() => {
   const resetButton = document.querySelector(".reset-button");
   resetButton.addEventListener("click", () => {
     resetSession();
-    const startButton = document.querySelector(".start-button");
-    startButton.style.display = "block";
-    resetButton.style.display = "none";
   });
 
   /**
@@ -351,6 +368,7 @@ const DisplayController = (() => {
   const resetSession = () => {
     game = null;
     resetIsClicked();
+    const startButton = document.querySelector(".start-button");
     const p1Input = document.querySelector(".p1-name-input");
     const p2Input = document.querySelector(".p2-name-input");
     const p1Div = document.querySelector(".p1-name");
@@ -364,6 +382,16 @@ const DisplayController = (() => {
     p2Div.style.display = "none";
     p1Score.style.display = "none";
     p2Score.style.display = "none";
+
+    startButton.style.display = "block";
+    resetButton.style.display = "none";
+
+    cells.forEach(cell => {
+      cell.textContent = " ";
+      cell.style.color = "rgba(0, 0, 0, 1.0)";
+    });
+
+    GameBoard.resetBoard();
 
     startSession();
   }
